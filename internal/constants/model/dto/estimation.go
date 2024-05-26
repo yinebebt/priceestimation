@@ -1,4 +1,4 @@
-package entity
+package dto
 
 import (
 	"github.com/google/uuid"
@@ -11,7 +11,6 @@ type Location struct {
 	Country string `json:"country"`
 	Region  string `json:"region"`
 	Zone    string `json:"zone"`
-	Woreda  string `json:"woreda"`
 	City    string `json:"city"`
 }
 
@@ -23,6 +22,16 @@ type PriceEstimation struct {
 	// UserID is unique identifier of the user creating the estimation
 	UserID    uuid.UUID `json:"user_id"`
 	Location  Location  `json:"location"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type User struct {
+	ID        uuid.UUID `json:"id"`
+	FirstName string    `json:"first_name"`
+	LastName  string    `json:"last_name"`
+	Email     string    `json:"email"`
+	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
