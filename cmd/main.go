@@ -1,6 +1,11 @@
 package main
 
+import (
+	"context"
+	"github.com/yinebebt/priceestimation/initiator"
+)
+
 // main is application entrance point
 func main() {
-	//todo
+	initiator.Initiator(context.Background())
 }

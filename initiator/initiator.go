@@ -4,12 +4,14 @@ import (
 	"context"
 	"fmt"
 	"github.com/yinebebt/priceestimation/internal/constants/query/persist"
+	"github.com/yinebebt/priceestimation/internal/handler/middleware"
 	"github.com/yinebebt/priceestimation/platform/logger"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
+	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
@@ -57,17 +59,26 @@ func Initiator(ctx context.Context) {
 	// if there, initialize state here
 
 	log.Info(ctx, "initializing module")
-	_ = InitModule(persistence, log)
+	module := InitModule(persistence, log)
 	log.Info(ctx, "module initialized")
+
+	log.Info(ctx, "initializing handler")
+	handler := InitHandler(module, log, viper.GetDuration("server.timeout"))
+	log.Info(ctx, "handler initialized")
 
 	log.Info(ctx, "initializing server")
 	server := gin.New()
 
+	server.Use(middleware.GinLogger(log.Named("gin")))
+	server.Use(ginzap.RecoveryWithZap(log.GetZapLogger().Named("gin.recovery"), true))
+
+	server.Use(middleware.ErrorHandler())
+	server.Use(middleware.InitCORS())
 	log.Info(ctx, "server initialized")
 
 	log.Info(ctx, "initializing router")
-	_ = server.Group("/api/v1")
-
+	v1 := server.Group("/api/v1")
+	InitRouter(v1, handler, log)
 	log.Info(ctx, "router initialized")
 
 	srv := &http.Server{
