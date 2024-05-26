@@ -51,10 +51,14 @@ func Initiator(ctx context.Context) {
 	// if there, do platform initialization, and database policies setup here
 	//
 	log.Info(ctx, "initializing persistence layer")
-	_ = InitPersistence(persist.New(Conn, log), log)
+	persistence := InitPersistence(persist.New(Conn, log), log)
 	log.Info(ctx, "persistence layer initialized")
 
 	// if there, initialize state here
+
+	log.Info(ctx, "initializing module")
+	_ = InitModule(persistence, log)
+	log.Info(ctx, "module initialized")
 
 	log.Info(ctx, "initializing server")
 	server := gin.New()

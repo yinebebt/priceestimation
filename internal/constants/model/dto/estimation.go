@@ -1,8 +1,13 @@
 package dto
 
 import (
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"github.com/go-ozzo/ozzo-validation/v4/is"
+	"github.com/yinebebt/priceestimation/utils"
+
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
+
 	"time"
 )
 
@@ -38,4 +43,33 @@ type User struct {
 	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
+}
+
+// Validate validations
+func (u User) Validate() error {
+	return validation.ValidateStruct(&u,
+		validation.Field(&u.FirstName, validation.Required.Error("first name is required")),
+		validation.Field(&u.LastName, validation.Required.Error("last name is required")),
+		validation.Field(&u.Email, validation.Required.Error("email is required"),
+			is.EmailFormat.Error("email is not valid")),
+		validation.Field(&u.Password, validation.Required.Error("password is required"),
+			PassWord.Error("weak password")),
+	)
+}
+
+var ErrPass = validation.NewError("validation_is_password", "must be strong password")
+var PassWord = validation.NewStringRuleWithError(utils.IsPasswordValid, ErrPass)
+
+func (p PriceEstimation) Validate() error {
+	return validation.ValidateStruct(&p,
+		validation.Field(&p.Price, validation.Required.Error("price is required")),
+		validation.Field(&p.LocationID, validation.Required.Error("location is required")),
+	)
+}
+
+func (l Location) Validate() error {
+	return validation.ValidateStruct(&l,
+		validation.Field(&l.Country, validation.Required.Error("country is required")),
+		validation.Field(&l.Region, validation.Required.Error("Region is required")),
+	)
 }
