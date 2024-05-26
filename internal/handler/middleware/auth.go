@@ -73,7 +73,6 @@ func (a *authMiddleware) Authenticate() gin.HandlerFunc {
 
 			return
 		}
-		//todo: check user status, do extra logics
 		if err := claims.Valid(); err != nil {
 			err := errors.ErrInvalidAccessToken.New("Unauthorized")
 			a.logger.Warn(ctx, "expired(invalid) token was used!",

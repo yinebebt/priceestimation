@@ -62,6 +62,34 @@ func (u *user) DeleteUser(ctx context.Context) error {
 	return u.storage.DeleteUser(ctx, usr.ID)
 }
 
+func (u *user) Login(ctx context.Context, param dto.LoginRequest) (*dto.LogInResponse, error) {
+	if err := param.Validate(); err != nil {
+		err := errors.ErrInvalidUserInput.Wrap(err, "invalid input")
+		u.log.Info(ctx, "invalid input", zap.Error(err), zap.Any("input", param))
+		return nil, err
+	}
+
+	usr, err := u.storage.GetByEmail(ctx, param.Email)
+	if err != nil {
+		return nil, err
+	}
+	err = utils.CheckPassword(param.Password, usr.Password)
+	if err != nil {
+		err := errors.ErrInvalidUserInput.Wrap(err, "invalid input")
+		u.log.Error(ctx, "error while checking password hash", zap.Error(err), zap.Any("input", param))
+		return nil, err
+	}
+
+	token := utils.GenerateToken(usr.ID)
+	return &dto.LogInResponse{
+		ID:        usr.ID.String(),
+		FirstName: usr.FirstName,
+		LastName:  usr.LastName,
+		Email:     usr.Email,
+		Token:     token,
+	}, nil
+}
+
 func getUserID(ctx context.Context, log logger.Logger) (uuid.UUID, error) {
 	userID := ctx.Value("id")
 	if userID == nil {

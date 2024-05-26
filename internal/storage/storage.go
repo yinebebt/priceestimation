@@ -24,4 +24,5 @@ type User interface {
 	CreateUser(ctx context.Context, param dto.User) (*dto.User, error)
 	GetUser(ctx context.Context, id uuid.UUID) (*dto.User, error)
 	DeleteUser(ctx context.Context, id uuid.UUID) error
+	GetByEmail(ctx context.Context, email string) (*dto.User, error)
 }

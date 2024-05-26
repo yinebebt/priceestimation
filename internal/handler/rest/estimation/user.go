@@ -106,3 +106,34 @@ func (u *user) DeleteUser() gin.HandlerFunc {
 		response.SuccessResponseData(ctx, http.StatusOK, "User deleted")
 	}
 }
+
+// LoginUser
+// @Summary      login user
+// @Description  login user
+// @Tags         Users
+// @param 		 Login body dto.LoginRequest true "login request body"
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  dto.LogInResponse
+// @Failure      400  {object}  map[string]string
+// @Failure      401  {object}  map[string]string
+// @Failure      404  {object}  map[string]string
+// @Failure      500  {object}  map[string]string
+// @Router       /users/auth [post]
+func (u *user) LoginUser() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		var req dto.LoginRequest
+		if err := ctx.ShouldBindJSON(&req); err != nil {
+			err := errors.ErrInvalidUserInput.Wrap(err, "invalid input")
+			u.logger.Warn(ctx, "unable to bind user login data", zap.Error(err))
+			_ = ctx.Error(err)
+			return
+		}
+		usr, err := u.module.Login(ctx, req)
+		if err != nil {
+			_ = ctx.Error(err)
+			return
+		}
+		response.SuccessResponseData(ctx, http.StatusOK, usr)
+	}
+}

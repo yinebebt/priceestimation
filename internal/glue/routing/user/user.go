@@ -19,10 +19,16 @@ func InitRoute(grp *gin.RouterGroup, user rest.User) {
 			Method:  http.MethodGet,
 			Path:    "/:id",
 			Handler: user.GetUser(),
-		}, {
+		},
+		{
 			Method:  http.MethodDelete,
 			Path:    "/:id",
 			Handler: user.DeleteUser(),
+		},
+		{
+			Method:  http.MethodPost,
+			Path:    "/auth",
+			Handler: user.LoginUser(),
 		},
 	}
 

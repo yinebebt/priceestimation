@@ -6,4 +6,5 @@ type User interface {
 	CreateUser() gin.HandlerFunc
 	GetUser() gin.HandlerFunc
 	DeleteUser() gin.HandlerFunc
+	LoginUser() gin.HandlerFunc
 }

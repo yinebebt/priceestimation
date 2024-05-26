@@ -10,6 +10,7 @@ type User interface {
 	CreateUser(ctx context.Context, param dto.User) (*dto.User, error)
 	GetUser(ctx context.Context) (*dto.User, error)
 	DeleteUser(ctx context.Context) error
+	Login(ctx context.Context, param dto.LoginRequest) (*dto.LogInResponse, error)
 }
 
 type Location interface {

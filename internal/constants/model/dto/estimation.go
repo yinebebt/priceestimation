@@ -73,3 +73,24 @@ func (l Location) Validate() error {
 		validation.Field(&l.Region, validation.Required.Error("Region is required")),
 	)
 }
+
+type LoginRequest struct {
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
+}
+
+func (u LoginRequest) Validate() error {
+	return validation.ValidateStruct(&u,
+		validation.Field(&u.Email, validation.Required.Error("email is required"),
+			is.EmailFormat.Error("Invalid email format")),
+		validation.Field(&u.Password, validation.Required.Error("password is required")),
+	)
+}
+
+type LogInResponse struct {
+	ID        string `json:"id"`
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+	Email     string `json:"email"`
+	Token     string `json:"token"`
+}

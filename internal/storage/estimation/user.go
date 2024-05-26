@@ -73,3 +73,21 @@ func (u *user) DeleteUser(ctx context.Context, id uuid.UUID) error {
 	}
 	return nil
 }
+
+func (u *user) GetByEmail(ctx context.Context, email string) (*dto.User, error) {
+	user, err := u.db.GetUserByEmail(ctx, email)
+	if err != nil {
+		err = errors.ErrReadError.Wrap(err, "could not read user")
+		u.log.Error(ctx, "unable to get user", zap.Error(err))
+		return nil, err
+	}
+	return &dto.User{
+		ID:        user.ID,
+		Email:     user.Email,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		CreatedAt: user.CreatedAt,
+		Password:  user.Password,
+		UpdatedAt: user.UpdatedAt,
+	}, nil
+}
