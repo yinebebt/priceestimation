@@ -8,16 +8,16 @@ import (
 	"github.com/yinebebt/priceestimation/internal/constants/model/dto"
 	"github.com/yinebebt/priceestimation/internal/constants/query/persist"
 	"github.com/yinebebt/priceestimation/internal/storage"
-	"github.com/yinebebt/priceestimation/platform"
+	"github.com/yinebebt/priceestimation/platform/logger"
 	"go.uber.org/zap"
 )
 
 type user struct {
 	db  persist.DB
-	log platform.Logger
+	log logger.Logger
 }
 
-func InitUser(db persist.DB, log platform.Logger) storage.User {
+func InitUser(db persist.DB, log logger.Logger) storage.User {
 	return &user{
 		db:  db,
 		log: log,

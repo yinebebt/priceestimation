@@ -8,16 +8,16 @@ import (
 	"github.com/yinebebt/priceestimation/internal/constants/model/dto"
 	"github.com/yinebebt/priceestimation/internal/constants/query/persist"
 	"github.com/yinebebt/priceestimation/internal/storage"
-	"github.com/yinebebt/priceestimation/platform"
+	"github.com/yinebebt/priceestimation/platform/logger"
 	"go.uber.org/zap"
 )
 
 type location struct {
 	db  persist.DB
-	log platform.Logger
+	log logger.Logger
 }
 
-func InitLocation(db persist.DB, log platform.Logger) storage.Location {
+func InitLocation(db persist.DB, log logger.Logger) storage.Location {
 	return &location{
 		db:  db,
 		log: log,
