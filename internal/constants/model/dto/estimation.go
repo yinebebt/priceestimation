@@ -8,10 +8,13 @@ import (
 
 // Location represents user-specified location data
 type Location struct {
-	Country string `json:"country"`
-	Region  string `json:"region"`
-	Zone    string `json:"zone"`
-	City    string `json:"city"`
+	ID        uuid.UUID `json:"id"`
+	Country   string    `json:"country"`
+	Region    string    `json:"region"`
+	Zone      string    `json:"zone"`
+	City      string    `json:"city"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // PriceEstimation represents the price estimation data
@@ -20,10 +23,11 @@ type PriceEstimation struct {
 	ProductName string          `json:"product_name"`
 	Price       decimal.Decimal `json:"price"`
 	// UserID is unique identifier of the user creating the estimation
-	UserID    uuid.UUID `json:"user_id"`
-	Location  Location  `json:"location"`
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	UserID     uuid.UUID `json:"user_id"`
+	LocationID uuid.UUID `json:"location_id"`
+	Location   Location  `json:"location"`
+	CreatedAt  time.Time `json:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at"`
 }
 
 type User struct {

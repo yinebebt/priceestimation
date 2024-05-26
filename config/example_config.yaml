@@ -1,0 +1,39 @@
+database:
+  url: postgres://user:password@localhost:5432/price_est?sslmode=disable
+
+  migration:
+    path: internal/constants/query/schemas
+    active: true
+
+debug: false
+
+server:
+  host: localhost
+  port: 8082
+  timeout: 30s
+  read_header_timeout: 30s
+
+swagger:
+  schemes:
+    - https
+    - http
+  host: localhost
+
+cors:
+  origin:
+    - http://localhost:80
+    - https://price-estimation.com:80
+
+  methods:
+    - POST
+    - GET
+    - PUT
+    - DELETE
+    - PATCH
+    - OPTIONS
+  allow_credentials: true
+  headers:
+    - Content-Type
+    - Options
+    - Authorization
+    - Origin

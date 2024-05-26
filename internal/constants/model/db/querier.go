@@ -20,7 +20,7 @@ type Querier interface {
 	DeleteUser(ctx context.Context, id uuid.UUID) error
 	GetLocation(ctx context.Context, id uuid.UUID) (Location, error)
 	GetLocations(ctx context.Context) ([]Location, error)
-	GetPriceEstimation(ctx context.Context, id uuid.UUID) (PriceEstimation, error)
+	GetPriceEstimation(ctx context.Context, id uuid.UUID) (GetPriceEstimationRow, error)
 	GetPriceEstimations(ctx context.Context) ([]PriceEstimation, error)
 	GetUser(ctx context.Context, id uuid.UUID) (User, error)
 	GetUsers(ctx context.Context) ([]User, error)

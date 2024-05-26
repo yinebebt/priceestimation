@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
@@ -59,21 +60,53 @@ func (q *Queries) DeletePriceEstimation(ctx context.Context, id uuid.UUID) error
 }
 
 const getPriceEstimation = `-- name: GetPriceEstimation :one
-SELECT id, product_name, user_id, price, location_id, created_at, updated_at FROM price_estimation
-WHERE id = $1 LIMIT 1
+SELECT
+    pe.id,
+    pe.product_name,
+    pe.price,
+    pe.user_id,
+    pe.location_id,
+    pe.created_at,
+    pe.updated_at,
+    l.country AS location_country,
+    l.region AS location_region,
+    l.zone AS location_zone,
+    l.city AS location_city
+FROM price_estimation AS pe
+         JOIN location AS l ON pe.location_id = l.id
+WHERE pe.id = $1
+    LIMIT 1
 `
 
-func (q *Queries) GetPriceEstimation(ctx context.Context, id uuid.UUID) (PriceEstimation, error) {
+type GetPriceEstimationRow struct {
+	ID              uuid.UUID       `json:"id"`
+	ProductName     string          `json:"product_name"`
+	Price           decimal.Decimal `json:"price"`
+	UserID          uuid.UUID       `json:"user_id"`
+	LocationID      uuid.UUID       `json:"location_id"`
+	CreatedAt       time.Time       `json:"created_at"`
+	UpdatedAt       time.Time       `json:"updated_at"`
+	LocationCountry string          `json:"location_country"`
+	LocationRegion  string          `json:"location_region"`
+	LocationZone    string          `json:"location_zone"`
+	LocationCity    string          `json:"location_city"`
+}
+
+func (q *Queries) GetPriceEstimation(ctx context.Context, id uuid.UUID) (GetPriceEstimationRow, error) {
 	row := q.db.QueryRow(ctx, getPriceEstimation, id)
-	var i PriceEstimation
+	var i GetPriceEstimationRow
 	err := row.Scan(
 		&i.ID,
 		&i.ProductName,
-		&i.UserID,
 		&i.Price,
+		&i.UserID,
 		&i.LocationID,
 		&i.CreatedAt,
 		&i.UpdatedAt,
+		&i.LocationCountry,
+		&i.LocationRegion,
+		&i.LocationZone,
+		&i.LocationCity,
 	)
 	return i, err
 }
