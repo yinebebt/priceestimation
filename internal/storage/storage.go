@@ -12,6 +12,7 @@ type PriceEstimation interface {
 	GetPriceEstimation(ctx context.Context, id uuid.UUID) (*dto.PriceEstimation, error)
 	UpdatePriceEstimation(ctx context.Context, price decimal.Decimal) (*dto.PriceEstimation, error)
 	DeletePriceEstimation(ctx context.Context, id uuid.UUID) error
+	ListPriceEstimation(ctx context.Context, param dto.PaginationRequest) ([]dto.PriceEstimation, error)
 }
 
 type Location interface {

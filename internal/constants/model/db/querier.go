@@ -25,6 +25,7 @@ type Querier interface {
 	GetUser(ctx context.Context, id uuid.UUID) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUsers(ctx context.Context) ([]User, error)
+	ListPriceEstimation(ctx context.Context, arg ListPriceEstimationParams) ([]ListPriceEstimationRow, error)
 	UpdatePriceEstimation(ctx context.Context, price decimal.Decimal) (PriceEstimation, error)
 }
 

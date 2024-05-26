@@ -8,11 +8,15 @@ import (
 )
 
 type Handler struct {
-	user rest.User
+	user            rest.User
+	location        rest.Location
+	priceEstimation rest.PriceEstimation
 }
 
 func InitHandler(module Module, log logger.Logger, timeout time.Duration) Handler {
 	return Handler{
-		user: estimation.InitUser(log.Named("user-handler"), module.user, timeout),
+		user:            estimation.InitUser(log.Named("user-handler"), module.user, timeout),
+		location:        estimation.InitLocation(log.Named("location-handler"), module.location, timeout),
+		priceEstimation: estimation.InitPriceEstimation(log.Named("price-estimation-handler"), module.priceEstimation, timeout),
 	}
 }

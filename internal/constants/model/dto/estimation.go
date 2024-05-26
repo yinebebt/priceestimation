@@ -35,6 +35,10 @@ type PriceEstimation struct {
 	UpdatedAt  time.Time `json:"updated_at"`
 }
 
+type UpdatePriceEstimation struct {
+	Price decimal.Decimal `json:"price"`
+}
+
 type User struct {
 	ID        uuid.UUID `json:"id"`
 	FirstName string    `json:"first_name"`
@@ -67,6 +71,12 @@ func (p PriceEstimation) Validate() error {
 	)
 }
 
+func (p UpdatePriceEstimation) Validate() error {
+	return validation.ValidateStruct(&p,
+		validation.Field(&p.Price, validation.Required.Error("price is required")),
+	)
+}
+
 func (l Location) Validate() error {
 	return validation.ValidateStruct(&l,
 		validation.Field(&l.Country, validation.Required.Error("country is required")),
@@ -93,4 +103,10 @@ type LogInResponse struct {
 	LastName  string `json:"last_name"`
 	Email     string `json:"email"`
 	Token     string `json:"token"`
+}
+
+// PaginationRequest represents the query parameters for pagination
+type PaginationRequest struct {
+	Limit  int32 `form:"limit" binding:"required,min=1,max=100"`
+	Offset int32 `form:"offset" binding:"min=0"`
 }

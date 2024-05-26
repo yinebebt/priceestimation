@@ -74,3 +74,8 @@ func getPriceEstimationID(ctx context.Context, log logger.Logger) (uuid.UUID, er
 	}
 	return userUID, nil
 }
+
+func (p *priceEstimation) ListPriceEstimation(ctx context.Context, param dto.PaginationRequest) ([]dto.PriceEstimation, error) {
+	// do validation on pagination data
+	return p.storage.ListPriceEstimation(ctx, param)
+}

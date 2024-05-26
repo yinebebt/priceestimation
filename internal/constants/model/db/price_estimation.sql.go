@@ -144,6 +144,77 @@ func (q *Queries) GetPriceEstimations(ctx context.Context) ([]PriceEstimation, e
 	return items, nil
 }
 
+const listPriceEstimation = `-- name: ListPriceEstimation :many
+SELECT
+    pe.id,
+    pe.product_name,
+    pe.price,
+    pe.user_id,
+    pe.location_id,
+    pe.created_at,
+    pe.updated_at,
+    l.country AS location_country,
+    l.region AS location_region,
+    l.zone AS location_zone,
+    l.city AS location_city
+FROM price_estimation AS pe
+         JOIN location AS l ON pe.location_id = l.id
+ORDER BY
+   pe.created_at asc
+LIMIT $1 OFFSET $2
+`
+
+type ListPriceEstimationParams struct {
+	Limit  int32 `json:"limit"`
+	Offset int32 `json:"offset"`
+}
+
+type ListPriceEstimationRow struct {
+	ID              uuid.UUID       `json:"id"`
+	ProductName     string          `json:"product_name"`
+	Price           decimal.Decimal `json:"price"`
+	UserID          uuid.UUID       `json:"user_id"`
+	LocationID      uuid.UUID       `json:"location_id"`
+	CreatedAt       time.Time       `json:"created_at"`
+	UpdatedAt       time.Time       `json:"updated_at"`
+	LocationCountry string          `json:"location_country"`
+	LocationRegion  string          `json:"location_region"`
+	LocationZone    string          `json:"location_zone"`
+	LocationCity    string          `json:"location_city"`
+}
+
+func (q *Queries) ListPriceEstimation(ctx context.Context, arg ListPriceEstimationParams) ([]ListPriceEstimationRow, error) {
+	rows, err := q.db.Query(ctx, listPriceEstimation, arg.Limit, arg.Offset)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	items := []ListPriceEstimationRow{}
+	for rows.Next() {
+		var i ListPriceEstimationRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.ProductName,
+			&i.Price,
+			&i.UserID,
+			&i.LocationID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.LocationCountry,
+			&i.LocationRegion,
+			&i.LocationZone,
+			&i.LocationCity,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const updatePriceEstimation = `-- name: UpdatePriceEstimation :one
 UPDATE price_estimation
 SET price = $1 WHERE id = $1 RETURNING id, product_name, user_id, price, location_id, created_at, updated_at

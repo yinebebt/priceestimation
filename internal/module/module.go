@@ -24,4 +24,5 @@ type PriceEstimation interface {
 	GetPriceEstimation(ctx context.Context) (*dto.PriceEstimation, error)
 	UpdatePriceEstimation(ctx context.Context, price decimal.Decimal) (*dto.PriceEstimation, error)
 	DeletePriceEstimation(ctx context.Context) error
+	ListPriceEstimation(ctx context.Context, param dto.PaginationRequest) ([]dto.PriceEstimation, error)
 }

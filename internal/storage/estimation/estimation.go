@@ -88,6 +88,35 @@ func (u *priceEstimation) UpdatePriceEstimation(ctx context.Context, price decim
 	}, nil
 }
 
+func (u *priceEstimation) ListPriceEstimation(ctx context.Context, param dto.PaginationRequest) ([]dto.PriceEstimation, error) {
+	estData, err := u.db.ListPriceEstimation(ctx, db.ListPriceEstimationParams{
+		Limit:  param.Limit,
+		Offset: param.Offset,
+	})
+	if err != nil {
+		err = errors.ErrWriteError.Wrap(err, "could not read user")
+		u.log.Error(ctx, "unable to get user", zap.Error(err))
+		return nil, err
+	}
+	var est []dto.PriceEstimation
+	for _, estimation := range estData {
+		est = append(est, dto.PriceEstimation{
+			ID:        estimation.ID,
+			Price:     estimation.Price,
+			UserID:    estimation.UserID,
+			CreatedAt: estimation.CreatedAt,
+			UpdatedAt: estimation.UpdatedAt,
+			Location: dto.Location{
+				Country: estimation.LocationCountry,
+				Region:  estimation.LocationRegion,
+				Zone:    estimation.LocationZone,
+				City:    estimation.LocationCity,
+			},
+		})
+	}
+	return est, nil
+}
+
 func (u *priceEstimation) DeletePriceEstimation(ctx context.Context, id uuid.UUID) error {
 	err := u.db.DeletePriceEstimation(ctx, id)
 	if err != nil {

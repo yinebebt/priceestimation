@@ -36,3 +36,21 @@ SET price = $1 WHERE id = $1 RETURNING *;
 -- name: DeletePriceEstimation :exec
 DELETE FROM price_estimation
 WHERE id = $1;
+
+
+-- name: ListPriceEstimation :many
+SELECT
+    pe.id,
+    pe.product_name,
+    pe.price,
+    pe.user_id,
+    pe.location_id,
+    pe.created_at,
+    pe.updated_at,
+    l.country AS location_country,
+    l.region AS location_region,
+    l.zone AS location_zone,
+    l.city AS location_city
+FROM price_estimation AS pe
+         JOIN location AS l ON pe.location_id = l.id
+LIMIT $1 OFFSET $2;
