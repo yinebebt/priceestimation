@@ -16,41 +16,45 @@ create user <username> with encrypted password '<password>';
 grant all privileges on database price_est to <username>; 
 ```
 
-## Available endpoints
+### Library and tools used
+I have used belows pretty cool library and tools, follow installation steps on their official docs.
 
-### User 
+**Golang-migrator**
+
+**Go-Swagger**
+
+**SQLC**
+
+**Docker**
+
+**Postgresql**
+
+**Goland**
+
+
+## Documentation
+ 
+### Checkout the [swagger docs](http://localhost:8082/api/v1/swagger/index.html) please!)
+
+### Available endpoints
+#### User 
  * Create user
-```curl
-curl --location 'http://localhost:8082/api/v1/users' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "first_name":"Yinebeb",
-    "last_name":"Tariku",
-    "email":"yintar5@gmail.com",
-    "password":"Abcd1234@"
-}'
-```
+ * Get
+ * Delete
 
-* Login
-```curl
-curl --location 'http://localhost:8082/api/v1/users/auth' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "email":"yintar5@gmail.com",
-    "password":"Abcd1234@"
-}'
-```
-
+#### Location
+* Create location
 * Get
-```curl
-curl --location 'http://localhost:8082/api/v1/users/c35963eb-7aa4-4e37-80a0-edb0fec93ff5'
-```
-
 * Delete
-```curl
-curl --location --request DELETE 'http://localhost:8082/api/v1/users/c35963eb-7aa4-4e37-80a0-edb0fec93ff5'
-```
+
+#### Price Estimation
+
+* create
+* List
+* Get
+* Update
+* Delete
 
 ## Reminder
 I had create a [hexagonal-architecture](https://github.com/yinebebt/hexagonal-architecture) project boilerplate, 
-please check out.
+please check out and let me know.

@@ -87,7 +87,7 @@ func (u *user) GetUser() gin.HandlerFunc {
 // DeleteUser godoc
 // @Summary      delete user
 // @Description  remove user
-// @Tags         Brands
+// @Tags         Users
 // @Accept       json
 // @Produce      json
 // @Success      200

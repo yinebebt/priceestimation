@@ -86,7 +86,7 @@ func (u *priceEstimation) GetPriceEstimation() gin.HandlerFunc {
 // DeletePriceEstimation godoc
 // @Summary      delete priceEstimation
 // @Description  remove priceEstimation
-// @Tags         Brands
+// @Tags         PriceEstimations
 // @Accept       json
 // @Produce      json
 // @Success      200
@@ -110,7 +110,7 @@ func (u *priceEstimation) DeletePriceEstimation() gin.HandlerFunc {
 // @Summary      update priceEstimation
 // @Description  update priceEstimation
 // @Tags         PriceEstimations
-// @param 		 createPriceEstimation body dto.PriceEstimation true "create priceEstimation request body"
+// @param 		 createPriceEstimation body dto.UpdatePriceEstimation true "create priceEstimation request body"
 // @Accept       json
 // @Produce      json
 // @Success      200  {object}  dto.PriceEstimation
@@ -145,6 +145,8 @@ func (u *priceEstimation) UpdatePriceEstimation() gin.HandlerFunc {
 // @Tags         PriceEstimations
 // @Accept       json
 // @Produce      json
+// @Param        limit  query     int  true  "Limit"
+// @Param        offset query     int  false "Offset"
 // @Success      200  {object}  dto.PaginationRequest
 // @Failure      400  {object}  map[string]string
 // @Failure      404  {object}  map[string]string
