@@ -14,13 +14,15 @@ services:
 
   app:
     build: .
+    command: ["/app/wait-for-it.sh", "db:5432", "--","go","run","./cmd/main.go"]
     ports:
-      - "8084:8084"
+      - "8082:8082"
     environment:
-      - PORT=8082
-      - DATABASE_URL=postgres://yinebeb:yinebeb@db:5432/price_est?sslmode=disable
+      CONFIG_NAME: config
     depends_on:
       - db
+    volumes:
+      - ./:/app
 
 volumes:
   db-data:

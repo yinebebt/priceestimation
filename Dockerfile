@@ -2,6 +2,7 @@ FROM golang:latest
 
 WORKDIR /app
 
+
 COPY go.mod .
 
 COPY go.sum .
@@ -10,14 +11,12 @@ RUN go mod download
 
 COPY . .
 
-# Set rest port
-ENV PORT 8082
+COPY wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
 
 # Build the app
 RUN go build -o app cmd/main.go
 
-RUN find . -name "*.go" -type f -delete
+EXPOSE 8082
 
-EXPOSE $PORT
-
-CMD ["./app"]
+CMD ["/app/wait-for-it.sh", "db:5432", "--","go","run","./cmd/main.go"]
