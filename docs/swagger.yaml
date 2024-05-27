@@ -1,0 +1,533 @@
+basePath: /api/v1
+definitions:
+  dto.Location:
+    properties:
+      city:
+        type: string
+      country:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+      region:
+        type: string
+      updated_at:
+        type: string
+      zone:
+        type: string
+    type: object
+  dto.LogInResponse:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      token:
+        type: string
+    type: object
+  dto.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  dto.PaginationRequest:
+    properties:
+      limit:
+        maximum: 100
+        minimum: 1
+        type: integer
+      offset:
+        minimum: 0
+        type: integer
+    required:
+    - limit
+    type: object
+  dto.PriceEstimation:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      location:
+        $ref: '#/definitions/dto.Location'
+      location_id:
+        type: string
+      price:
+        type: number
+      product_name:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        description: UserID is unique identifier of the user creating the estimation
+        type: string
+    type: object
+  dto.UpdatePriceEstimation:
+    properties:
+      price:
+        type: number
+    type: object
+  dto.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      password:
+        type: string
+      updated_at:
+        type: string
+    type: object
+host: localhost
+info:
+  contact:
+    email: contact@price_estimation
+    name: Support Email
+    url: Contact_url
+  title: price-estimation api
+  version: 0.1.0
+paths:
+  /estimations:
+    get:
+      consumes:
+      - application/json
+      description: get priceEstimation (sysAdmin)
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PaginationRequest'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: get priceEstimation
+      tags:
+      - PriceEstimations
+    post:
+      consumes:
+      - application/json
+      description: register priceEstimation
+      parameters:
+      - description: create priceEstimation request body
+        in: body
+        name: createPriceEstimation
+        required: true
+        schema:
+          $ref: '#/definitions/dto.PriceEstimation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PriceEstimation'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: add priceEstimation
+      tags:
+      - PriceEstimations
+  /estimations/:id:
+    delete:
+      consumes:
+      - application/json
+      description: remove priceEstimation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: delete priceEstimation
+      tags:
+      - PriceEstimations
+    get:
+      consumes:
+      - application/json
+      description: get priceEstimation (sysAdmin)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PriceEstimation'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: get priceEstimation
+      tags:
+      - PriceEstimations
+    patch:
+      consumes:
+      - application/json
+      description: update priceEstimation
+      parameters:
+      - description: create priceEstimation request body
+        in: body
+        name: createPriceEstimation
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdatePriceEstimation'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.PriceEstimation'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: update priceEstimation
+      tags:
+      - PriceEstimations
+  /locations:
+    post:
+      consumes:
+      - application/json
+      description: register location
+      parameters:
+      - description: create location request body
+        in: body
+        name: createUser
+        required: true
+        schema:
+          $ref: '#/definitions/dto.Location'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Location'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: add location
+      tags:
+      - Users
+  /locations/:id:
+    get:
+      consumes:
+      - application/json
+      description: get location
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Location'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: get location
+      tags:
+      - Users
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: register user
+      parameters:
+      - description: create user request body
+        in: body
+        name: createUser
+        required: true
+        schema:
+          $ref: '#/definitions/dto.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "403":
+          description: Forbidden
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: add user
+      tags:
+      - Users
+  /users/:id:
+    delete:
+      consumes:
+      - application/json
+      description: remove user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: delete user
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: get user (sysAdmin)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: get user
+      tags:
+      - Users
+  /users/auth:
+    post:
+      consumes:
+      - application/json
+      description: login user
+      parameters:
+      - description: login request body
+        in: body
+        name: Login
+        required: true
+        schema:
+          $ref: '#/definitions/dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.LogInResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: login user
+      tags:
+      - Users
+swagger: "2.0"
